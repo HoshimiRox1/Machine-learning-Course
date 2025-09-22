@@ -23,7 +23,7 @@ def gradientDescent(W, X, Y, lr, iterations):
 
       return (W,J)
 
-iterations = 1000
+iterations = 50
 lr = 0.0001
 
 data = np.loadtxt("Schoolwork2/LR.txt", delimiter=',')
