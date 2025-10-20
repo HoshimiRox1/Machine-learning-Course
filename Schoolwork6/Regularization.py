@@ -27,8 +27,13 @@ def read_data(addr):
     return (X,Y,n)
 
 def cost_gradient(W, X, Y, n, lambd):
-    G = ###### Gradient
-    j = ###### cost with respect to current W
+    Y_hat = 1 / (1 + np.exp(-X @ W))
+    
+    loss = (-1 / n) * np.sum((Y * np.log(Y_hat) + (1-Y) * np.log(1- Y_hat + np.spacing(1))) )
+    regu = (lambd / 2) * np.sum(W * W)
+    
+    G = (1 / n) * (X.T @ (Y_hat - Y)) + lambd * W
+    j = loss + regu
     
     return (j, G)
 
@@ -50,7 +55,7 @@ def error(W, X, Y):
     return (1-np.mean(np.equal(Y_hat, Y)))
 
 def predict(W):
-    (X, _, _) = read_data("test_data.csv")
+    (X, _, _) = read_data("Schoolwork6/test_data.csv")
     
     Y_hat = 1 / (1 + np.exp(-X@W))
     Y_hat[Y_hat<0.5] = 0
@@ -59,11 +64,11 @@ def predict(W):
     idx = np.expand_dims(np.arange(1,201), axis=1)
     np.savetxt("predict.csv", np.concatenate([idx, Y_hat], axis=1), header = "Index,ID", comments='', delimiter=',')
     
-iterations = ###### Training loops
-lr = ###### Learning rate
-lambd = ##### Lambda to control the weight of Regularization part
+iterations = 10000
+lr = 0.005
+lambd = 0.001
 
-(X, Y, n) = read_data("train.csv")
+(X, Y, n) = read_data("Schoolwork6/train.csv")
 W = np.random.random([X.shape[1], 1])
 
 (W,J,err) = train(W, X, Y, lr, n, iterations, lambd)
@@ -71,5 +76,6 @@ print(err)
 
 plt.figure()
 plt.plot(range(iterations), J)
+plt.show()
 
 predict(W)
