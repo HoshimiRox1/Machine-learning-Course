@@ -2,20 +2,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
 def cost_gradient(W, X, Y, n):
-      G = ###### Gradient
-      j = ###### cost with respect to current W
-      
+    z = X @ W
+    Y_hat = sigmoid(z)
+    G = X.T @ (Y_hat - Y) / n
+    j = -np.mean(Y * np.log(Y_hat + 1e-8) + (1 - Y) * np.log(1 - Y_hat + 1e-8))
+    
     return (j, G)
 
 def gradientDescent(W, X, Y, n, lr, iterations):
-      J = np.zeros([iterations, 1])
+    J = np.zeros([iterations, 1])
       
-      for i in range(iterations):
-          (J[i], G) = cost_gradient(W, X, Y, n)
-          W = ###### Update W based on gradient
+    for i in range(iterations):
+        (J[i], G) = cost_gradient(W, X, Y, n)
+        W = W - lr * G
 
-      return (W,J)
+    return (W,J)
 
 def error(W, X, Y):
     Y_hat = np.sign(X@W)
@@ -23,10 +28,10 @@ def error(W, X, Y):
     
     return (1 - np.mean(np.equal(Y_hat, Y)))
 
-iterations = ###### Training loops
-lr = ###### Learning rate
+iterations = 1000
+lr = 0.05
 
-data = np.loadtxt('LR.txt', delimiter=',')
+data = np.loadtxt('Schoolwork4\LR.txt', delimiter=',')
 
 n = data.shape[0]
 W = np.random.random([3, 1])
@@ -51,3 +56,4 @@ plt.plot(x1, y1)
 
 plt.figure()
 plt.plot(range(iterations), J)
+plt.show()
