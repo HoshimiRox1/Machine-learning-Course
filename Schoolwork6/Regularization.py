@@ -9,15 +9,9 @@ def read_data(addr):
     
     ###### You may modify this section to change the model
     X = np.concatenate([np.ones([n, 1]),
-                        np.expand_dims(np.power(data[:,0],1), axis=1),
-                        np.expand_dims(np.power(data[:,1],1), axis=1),
-                        np.expand_dims(np.power(data[:,2],1), axis=1),
-                        np.expand_dims(np.power(data[:,3],1), axis=1),
-                        np.expand_dims(np.power(data[:,4],1), axis=1),
-                        np.expand_dims(np.power(data[:,5],1), axis=1),
-                        np.expand_dims(np.power(data[:,6],1), axis=1),
-                        np.expand_dims(np.power(data[:,7],1), axis=1)],
-                        axis=1)
+                    data[:, 0:8],  # 8个原始特征 (1次方)
+                    np.power(data[:, 0:8], 2) # 8个特征的平方项 (2次方)
+                   ], axis=1)
     ###### You may modify this section to change the model
 
     Y = None
@@ -62,11 +56,11 @@ def predict(W):
     Y_hat[Y_hat>0.5] = 1
     
     idx = np.expand_dims(np.arange(1,201), axis=1)
-    np.savetxt("predict.csv", np.concatenate([idx, Y_hat], axis=1), header = "Index,ID", comments='', delimiter=',')
+    np.savetxt("Schoolwork6/predict.csv", np.concatenate([idx, Y_hat], axis=1), header = "Index,ID", comments='', delimiter=',')
     
-iterations = 10000
-lr = 0.005
-lambd = 0.001
+iterations = 1000
+lr = 0.05
+lambd = 0.035
 
 (X, Y, n) = read_data("Schoolwork6/train.csv")
 W = np.random.random([X.shape[1], 1])
